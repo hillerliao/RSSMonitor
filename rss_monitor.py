@@ -1,11 +1,12 @@
 import json
 import hashlib
 import time
+from datetime import datetime
+import os
 import feedparser
 from html.parser import HTMLParser
 from urllib.parse import quote
 from push_service import send_notification
-
 
 # HTML 清理工具
 class HTMLCleaner(HTMLParser):
@@ -31,6 +32,32 @@ def clean_html(html):
 def load_config():
     with open('config.json', 'r', encoding='utf-8') as f:
         return json.load(f)
+
+
+# 获取当前年月作为文件名，并保存在 `rssJsonFiles` 文件夹内
+def get_file_name():
+    now = datetime.now()
+    folder_path = 'rssJsonFiles'
+    os.makedirs(folder_path, exist_ok=True)  # 确保文件夹存在
+    return os.path.join(folder_path, f"seen_hashes_{now.year}_{now.month}.json")
+
+# 加载已处理的哈希值及文章信息
+def load_seen_hashes():
+    file_name = get_file_name()
+    if os.path.exists(file_name):
+        with open(file_name, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    else:
+        # 如果文件不存在，则创建一个空的 JSON 文件
+        with open(file_name, 'w', encoding='utf-8') as f:
+            json.dump([], f)
+        return []
+
+# 保存已处理的哈希值及文章信息
+def save_seen_hashes(seen_hashes):
+    file_name = get_file_name()
+    with open(file_name, 'w', encoding='utf-8') as f:
+        json.dump(seen_hashes, f, ensure_ascii=False, indent=4)
 
 
 # 检查 RSS 分组
@@ -74,14 +101,20 @@ def check_rss_group(rss_group, seen_hashes):
                 # 记录已处理文章
                 seen_hashes.add(entry_hash)
 
+                # 保存已处理的哈希记录
+                save_seen_hashes(seen_hashes)
+
 
 # 主程序
 def main():
     config = load_config()
-    seen_hashes = set()
+    seen_hashes = load_seen_hashes()  # 加载已处理的哈希记录
 
     for rss_group in config['rss_groups']:
         check_rss_group(rss_group, seen_hashes)
+
+    # 最后保存所有已处理的哈希记录
+    save_seen_hashes(seen_hashes)
 
 
 if __name__ == "__main__":
