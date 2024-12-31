@@ -1,0 +1,19 @@
+{
+    "rss_groups": [      
+      {
+        "group_name": "小蚂蚁",
+        "rss_urls": [
+          "https://blog.example.com/rss1",
+          "https://blog.example.com/rss2"
+        ],
+        "push_channels": [
+          {
+            "type": "dingtalk",
+            "webhook": "https://oapi.dingtalk.com/robot/send?access_token=your_access_token"
+          }
+        ]
+      }
+      
+    ]
+  }
+  
