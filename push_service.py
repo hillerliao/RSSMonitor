@@ -38,7 +38,7 @@ def send_dingtalk_message(config, title, content):
     payload = {
         "msgtype": "text",
         "text": {
-            "content": f"{title}\n\n{content}"
+            "content": f"{content}\n\n{title}"
         }
     }
     response = requests.post(url, json=payload)
