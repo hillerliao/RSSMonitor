@@ -1,19 +1,53 @@
 {
-    "rss_groups": [      
-      {
-        "group_name": "小蚂蚁",
-        "rss_urls": [
-          "https://blog.example.com/rss1",
-          "https://blog.example.com/rss2"
-        ],
-        "push_channels": [
-          {
-            "type": "dingtalk",
-            "webhook": "https://oapi.dingtalk.com/robot/send?access_token=your_access_token"
-          }
-        ]
-      }
-      
-    ]
-  }
-  
+  "rss_groups": [
+    {
+      "group_name": "新闻组",
+      "rss_urls": [
+        "https://news.example.com/rss1",
+        "https://news.example.com/rss2"
+      ],
+      "push_channels": [
+        {
+          "type": "wechat",
+          "corp_id": "wx123",
+          "corp_secret": "secret123",
+          "agent_id": "100001"
+        },
+        {
+          "type": "server_chan",
+          "send_key": "SCT123KEY"
+        }
+      ]
+    },
+    {
+      "group_name": "博客组",
+      "rss_urls": [
+        "https://blog.example.com/rss1",
+        "https://blog.example.com/rss2"
+      ],
+      "push_channels": [
+        {
+          "type": "dingtalk",
+          "webhook": "https://oapi.dingtalk.com/robot/send?access_token=your_access_token"
+        }
+      ]
+    },
+    {
+      "group_name": "技术组",
+      "rss_urls": [
+        "https://tech.example.com/rss1"
+      ],
+      "push_channels": [
+        {
+          "type": "telegram",
+          "bot_token": "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11",
+          "chat_id": "-1001234567890"
+        },
+        {
+          "type": "server_chan",
+          "send_key": "SCT123KEY"
+        }
+      ]
+    }
+  ]
+}
