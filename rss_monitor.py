@@ -79,7 +79,7 @@ def check_rss_group(rss_group, seen_hashes):
         for entry in feed.entries:
             entry_hash = hashlib.md5(entry.link.encode('utf-8')).hexdigest()
 
-            if entry_hash not in seen_hashes:
+            if not any(item['hash'] == entry_hash for item in seen_hashes):
                 title = entry.title
                 link = entry.link  # 获取条目的 URL
                 summary = clean_html(entry.summary) if 'summary' in entry else "无摘要"
@@ -99,7 +99,14 @@ def check_rss_group(rss_group, seen_hashes):
                     time.sleep(2)
 
                 # 记录已处理文章
-                seen_hashes.add(entry_hash)
+                seen_hashes.append({
+                    'hash': entry_hash,
+                    'title': title,
+                    'link': link,
+                    'summary': summary,
+                    'group': group_name,
+                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                })
 
                 # 保存已处理的哈希记录
                 save_seen_hashes(seen_hashes)
