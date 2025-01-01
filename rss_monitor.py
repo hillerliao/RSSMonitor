@@ -83,13 +83,12 @@ def check_rss_group(rss_group, seen_hashes):
                 title = entry.title
                 link = entry.link  # 获取条目的 URL
                 summary = clean_html(entry.summary) if 'summary' in entry and clean_html(entry.summary) != title else "无摘要" if 'summary' not in entry else ""
-
-                # 拼接消息内容
-                content = f"{title}\n{link}\n{summary}"
+ 
+                content = {"feed_title": feed_title, "title": title, "link": link, "summary": summary}
 
                 # 推送到多个通道
                 for channel in push_channels:
-                    success = send_notification(channel, feed_title, content)
+                    success = send_notification(channel, content)
                     if success:
                         print(f"推送成功: [{channel['type']}] {title}")
                     else:
